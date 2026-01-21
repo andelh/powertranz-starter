@@ -1,10 +1,11 @@
 import { CreditCardForm } from "@/components/credit-card-form";
 import { Button } from "@/components/ui/button";
+import { Terminal, TypingAnimation, AnimatedSpan } from "@/components/ui/terminal";
 import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background ">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <div className="relative">
         {/* Background decoration */}
@@ -66,65 +67,61 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Side - Credit Card Form */}
+            {/* Right Side - Terminal Demo */}
             <div className="flex justify-center lg:justify-end">
-              <div className="w-full max-w-md">
-                <CreditCardForm />
-              </div>
+              <Terminal className="shadow-2xl">
+                <TypingAnimation>
+                  npx shadcn@latest add @powertranz/payment-hooks
+                </TypingAnimation>
+                <AnimatedSpan className="text-green-400">
+                  √ Checking registry.
+                </AnimatedSpan>
+                <AnimatedSpan className="text-green-400">
+                  √ Installing dependencies.
+                </AnimatedSpan>
+                <AnimatedSpan className="text-blue-400">
+                  ℹ Created 17 files:
+                </AnimatedSpan>
+                <div className="pl-4 grid gap-y-1 text-muted-foreground">
+                  <AnimatedSpan className="text-muted-foreground">
+                    - lib/powertranz/types.ts
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - lib/powertranz/client.ts
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - lib/powertranz/index.ts
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - lib/powertranz/utils.ts
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - hooks/use-powertranz.ts
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - components/powertranz-iframe.tsx
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - app/api/powertranz/tokenize/route.ts
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - app/api/powertranz/auth/route.ts
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - ...and 9 more API routes
+                  </AnimatedSpan>
+                </div>
+                <AnimatedSpan className="text-green-400 mt-2">
+                  √ Installation complete!
+                </AnimatedSpan>
+                <AnimatedSpan className="text-yellow-400">
+                  ℹ Run yarn dev to start building.
+                </AnimatedSpan>
+              </Terminal>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Additional Features Section */}
-      {/* <div className="border-t border-border bg-muted/50">
-        <div className="max-w-6xl mx-auto px-4 py-24">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">
-              Everything you need for payment processing
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              From tokenization to capture, refunds to reconciliation -
-              PowerTranz provides all the tools you need.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center space-y-4">
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center mx-auto">
-                <span className="text-2xl">🔐</span>
-              </div>
-              <h3 className="text-xl font-semibold">Secure Tokenization</h3>
-              <p className="text-muted-foreground">
-                Convert sensitive card data into secure tokens for safe storage
-                and processing.
-              </p>
-            </div>
-
-            <div className="text-center space-y-4">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center mx-auto">
-                <span className="text-2xl">⚡</span>
-              </div>
-              <h3 className="text-xl font-semibold">Instant Processing</h3>
-              <p className="text-muted-foreground">
-                Process payments in real-time with our high-performance
-                infrastructure.
-              </p>
-            </div>
-
-            <div className="text-center space-y-4">
-              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center mx-auto">
-                <span className="text-2xl">🛡️</span>
-              </div>
-              <h3 className="text-xl font-semibold">3D Secure</h3>
-              <p className="text-muted-foreground">
-                Enhanced security with 3D Secure authentication for card
-                transactions.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 }
