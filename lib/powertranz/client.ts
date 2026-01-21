@@ -28,17 +28,4 @@ export const createPowertranzClient = () => {
   });
 };
 
-export const createAdminClient = () => {
-  const adminBaseUrl = process.env.POWERTRANZ_ADMIN_BASE_URL || powertranzConfig.baseUrl;
-  return axios.create({
-    baseURL: adminBaseUrl,
-    headers: {
-      "PowerTranz-PowerTranzId": powertranzConfig.merchantId,
-      "PowerTranz-PowerTranzPassword": powertranzConfig.password,
-      "Content-Type": "application/json; charset=utf-8",
-    },
-    timeout: 30000,
-  });
-};
-
 export { sanitizeForLogging };

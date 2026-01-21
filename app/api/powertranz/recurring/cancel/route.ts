@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { RecurringCancelProps, createAdminClient, sanitizeForLogging } from "@/lib/powertranz";
+import { RecurringCancelProps, createPowertranzClient, sanitizeForLogging } from "@/lib/powertranz";
 
 export async function POST(request: Request) {
   const data = (await request.json()) as RecurringCancelProps;
@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     recurringIdentifier: data.recurringIdentifier,
   }));
 
-  const client = createAdminClient();
+  const client = createPowertranzClient();
 
   try {
     const response = await client.post("/admin/recurring/cancel", {

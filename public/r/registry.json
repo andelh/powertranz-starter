@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "powertranz-starter-template",
-  "homepage": "https://github.com/andelhusbands/powertranz-starter-template",
+  "homepage": "https://github.com/andelh/powertranz-starter",
   "items": [
     {
       "name": "payment-hooks",
@@ -32,6 +32,10 @@
         },
         {
           "path": "registry/payment-hooks/lib/powertranz/client.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/payment-hooks/lib/powertranz/utils.ts",
           "type": "registry:lib"
         },
         {

@@ -1,5 +1,6 @@
 export * from "./types";
 export * from "./client";
+export * from "./utils";
 export * from "./builders/tokenize";
 export * from "./builders/auth";
 export * from "./builders/capture";
