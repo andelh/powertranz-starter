@@ -48,11 +48,17 @@ export async function POST(request: Request) {
   if (data.cardToken) {
     requestBody.Source = { Token: data.cardToken };
   } else if (data.cardPan) {
+    if (!data.cardCvv || !data.cardExpiration || !data.cardholderName) {
+      return NextResponse.json(
+        { error: "Validation failed", message: "When providing cardPan, cardCvv, cardExpiration, and cardholderName are all required" },
+        { status: 400 }
+      );
+    }
     requestBody.Source = {
       CardPan: data.cardPan,
-      CardCvv: data.cardCvv!,
-      CardExpiration: data.cardExpiration!,
-      CardholderName: data.cardholderName!,
+      CardCvv: data.cardCvv,
+      CardExpiration: data.cardExpiration,
+      CardholderName: data.cardholderName,
     };
   }
 
