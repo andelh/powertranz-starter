@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     console.log("Refund response:", sanitizeForLogging(response.data));
     return NextResponse.json(response.data);
   } catch (error) {
-    console.error("PowerTranz refund error:", error);
+    console.error("PowerTranz refund error:", sanitizeForLogging(error as Record<string, unknown>));
     return NextResponse.json(
       { error: "Refund failed", message: "Failed to process refund" },
       { status: 500 }

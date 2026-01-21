@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     console.log("Recurring cancel response (sanitized):", sanitizeForLogging(response.data));
     return NextResponse.json(response.data);
   } catch (error) {
-    console.error("PowerTranz recurring cancel error:", error);
+    console.error("PowerTranz recurring cancel error:", sanitizeForLogging(error as Record<string, unknown>));
     return NextResponse.json(
       { error: "Recurring cancel failed", message: "Failed to cancel recurring transaction" },
       { status: 500 }
