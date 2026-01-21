@@ -114,11 +114,24 @@ export default function Home() {
                 <AnimatedSpan className="text-green-400 mt-2">
                   √ Installation complete!
                 </AnimatedSpan>
-                <AnimatedSpan className="text-yellow-400">
-                  ℹ Run yarn dev to start building.
-                </AnimatedSpan>
               </Terminal>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Try It Out Section */}
+      <div className="border-t border-border bg-muted/30">
+        <div className="max-w-6xl mx-auto px-4 py-24">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Try It Out</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Test the PowerTranz integration right here. Tokenize a card, authorize a payment, or process a sale.
+            </p>
+          </div>
+
+          <div className="flex justify-center">
+            <CreditCardForm />
           </div>
         </div>
       </div>

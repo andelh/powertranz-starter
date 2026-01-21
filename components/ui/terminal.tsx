@@ -229,11 +229,11 @@ export const Terminal = ({
     <div
       ref={containerRef}
       className={cn(
-        "border-border bg-zinc-950 z-0 h-full max-h-[400px] w-full max-w-2xl rounded-xl border",
+        "border-border bg-zinc-950 dark:bg-zinc-950 bg-white dark:border-border z-0 h-full max-h-[400px] w-full max-w-2xl rounded-xl border dark:text-white text-zinc-900",
         className
       )}
     >
-      <div className="border-border flex flex-col gap-y-2 border-b p-3 bg-zinc-900/50">
+      <div className="border-border flex flex-col gap-y-2 border-b p-3 dark:bg-zinc-900/50 bg-zinc-100">
         <div className="flex flex-row gap-x-2">
           <div className="h-3 w-3 rounded-full bg-red-500" />
           <div className="h-3 w-3 rounded-full bg-yellow-500" />
