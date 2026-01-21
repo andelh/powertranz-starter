@@ -23,12 +23,16 @@ export function PowertranzIframe({
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin) {
-        return;
-      }
-
       try {
         const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+
+        if (
+          typeof data !== "object" ||
+          data === null ||
+          typeof data.type !== "string"
+        ) {
+          return;
+        }
 
         if (data.type === "powertranz-complete") {
           onComplete?.(data.payload);

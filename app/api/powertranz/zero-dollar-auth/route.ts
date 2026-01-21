@@ -1,44 +1,47 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
 
-export const dynamic = "force-dynamic"; // defaults to force-static
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   const data = await request.json();
-  const {
-    siteRoot,
-    cardNumber,
-    amount,
-    cvv = "123",
-    expiration = "2505",
-    cardholderName = "John Baker",
-    orderId,
-    transactionIdentifier,
-  } = data;
-  console.log({
-    amount,
-    cardNumber,
-    cvv,
-    expiration,
-    cardholderName,
-    orderId,
-    transactionIdentifier,
-  });
 
-  // build authorization request
+  const requiredFields = ["siteRoot", "cardNumber", "amount", "orderId", "transactionIdentifier"];
+  const missingFields = requiredFields.filter((field) => !data[field]);
+
+  if (missingFields.length > 0) {
+    return NextResponse.json(
+      { error: `Missing required fields: ${missingFields.join(", ")}` },
+      { status: 400 }
+    );
+  }
+
+  const { siteRoot, cardNumber, amount, cvv, expiration, cardholderName, orderId, transactionIdentifier } = data;
+
+  const Source: Record<string, string> = {
+    CardPan: cardNumber,
+  };
+
+  if (cvv !== undefined) {
+    Source.CardCvv = cvv;
+  }
+
+  if (expiration !== undefined) {
+    Source.CardExpiration = expiration;
+  }
+
+  if (cardholderName !== undefined) {
+    Source.CardholderName = cardholderName;
+  }
+
   const authWithTokenizeRequest = {
     TransactionIdentifier: transactionIdentifier,
     TotalAmount: Number(amount),
-    CurrencyCode: "780", //TTD code
+    CurrencyCode: "780",
     ThreeDSecure: true,
     FraudCheck: true,
     OrderIdentifier: orderId,
-    Source: {
-      CardPan: cardNumber,
-      CardCvv: cvv,
-      CardExpiration: expiration,
-      CardholderName: cardholderName,
-    },
+    Source,
     ExtendedData: {
       ThreeDSecure: {
         ChallengeWindowSize: 4,
@@ -65,7 +68,9 @@ export async function POST(request: Request) {
     return NextResponse.json(authWithTokenResponse.data);
   } catch (error) {
     console.log(`PowerTranz ERROR: ${error}`);
-    // Return a new error response
-    return NextResponse.error();
+    return NextResponse.json(
+      { error: "PowerTranz authorization failed" },
+      { status: 500 }
+    );
   }
 }
