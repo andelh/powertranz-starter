@@ -39,3 +39,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# AI/Tooling
+.opencode/
+.ralphy/
+.ralphy-worktrees/
+
+# Registry build output
+/public/r/*.json
+!/public/r/registry.json
+

@@ -1,47 +1,27 @@
-import axios from "axios";
 import { NextResponse } from "next/server";
+import { createPowertranzClient, sanitizeForLogging } from "@/lib/powertranz";
 
 export async function POST(request: Request) {
-  // Set CORS headers
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  };
   const data = await request.json();
   const { transactionIdentifier, amount } = data;
-  console.log({
-    transactionIdentifier,
-    amount,
-  });
 
-  const config: {
-    method: string;
-    url: string;
-    headers: any;
-    data: string | Object;
-  } = {
-    method: "post",
-    url: `${process.env.NEXT_PUBLIC_FAC_PTRANZ_BASE_URL}/capture`,
-    headers: {
-      "PowerTranz-PowerTranzId": process.env.FAC_MERCHANT_ID,
-      "PowerTranz-PowerTranzPassword": process.env.FAC_PROCESSING_PASS,
-      "Content-Type": "application/json; charset=utf-8",
-    },
-    data: {
-      TransactionIdentifier: transactionIdentifier,
-      TotalAmount: Number(amount),
-    },
-  };
+  console.log("Capture request (sanitized):", sanitizeForLogging({ transactionIdentifier, amount }));
+
+  const client = createPowertranzClient();
 
   try {
-    const captureResult = await axios(config);
-    const captureResponse = captureResult.data;
-    console.log("capture response:", captureResponse);
+    const response = await client.post("/capture", {
+      TransactionIdentifier: transactionIdentifier,
+      TotalAmount: Number(amount),
+    });
 
-    return NextResponse.json(captureResponse);
+    console.log("Capture response:", sanitizeForLogging(response.data));
+    return NextResponse.json(response.data);
   } catch (error) {
-    console.log(`PowerTranz ERROR: ${error}`);
-    // Return a new error response
-    return NextResponse.error();
+    console.error("PowerTranz capture error:", error);
+    return NextResponse.json(
+      { error: "Capture failed", message: "Failed to capture authorization" },
+      { status: 500 }
+    );
   }
 }

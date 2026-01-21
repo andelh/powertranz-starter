@@ -7,50 +7,141 @@
       "name": "payment-hooks",
       "type": "registry:block",
       "title": "PowerTranz payment hooks",
-      "description": "Hooks and route handlers for PowerTranz payment flows.",
+      "description": "React hooks and API route handlers for PowerTranz payment flows including tokenization, authorization, capture, refund, void, and hosted payment pages.",
+      "author": "PowerTranz <support@powertranz.com>",
+      "categories": ["payments", "integrations", "react-hooks", "api-routes"],
+      "docs": "This registry item provides a complete payment integration with PowerTranz. Requires POWERTRANZ_BASE_URL, POWERTRANZ_MERCHANT_ID, and POWERTRANZ_PROCESSING_PASSWORD environment variables.",
       "dependencies": ["axios"],
+      "registryDependencies": ["button", "input", "label", "card"],
       "files": [
         {
-          "path": "registry/new-york/payment-hooks/components/hooks/use-powertranz.ts",
-          "type": "registry:file",
-          "target": "components/hooks/use-powertranz.ts"
+          "path": "registry/payment-hooks/lib/powertranz/types.ts",
+          "type": "registry:lib"
         },
         {
-          "path": "registry/new-york/payment-hooks/app/api/powertranz/auth/route.ts",
-          "type": "registry:file",
-          "target": "app/api/powertranz/auth/route.ts"
+          "path": "registry/payment-hooks/lib/powertranz/client.ts",
+          "type": "registry:lib"
         },
         {
-          "path": "registry/new-york/payment-hooks/app/api/powertranz/auth-response/route.ts",
-          "type": "registry:file",
-          "target": "app/api/powertranz/auth-response/route.ts"
+          "path": "registry/payment-hooks/lib/powertranz/index.ts",
+          "type": "registry:lib"
         },
         {
-          "path": "registry/new-york/payment-hooks/app/api/powertranz/capture/route.ts",
-          "type": "registry:file",
-          "target": "app/api/powertranz/capture/route.ts"
+          "path": "registry/payment-hooks/lib/powertranz/builders/tokenize.ts",
+          "type": "registry:lib"
         },
         {
-          "path": "registry/new-york/payment-hooks/app/api/powertranz/refund/route.ts",
-          "type": "registry:file",
-          "target": "app/api/powertranz/refund/route.ts"
+          "path": "registry/payment-hooks/lib/powertranz/builders/auth.ts",
+          "type": "registry:lib"
         },
         {
-          "path": "registry/new-york/payment-hooks/app/api/powertranz/response/route.ts",
-          "type": "registry:file",
-          "target": "app/api/powertranz/response/route.ts"
+          "path": "registry/payment-hooks/lib/powertranz/builders/capture.ts",
+          "type": "registry:lib"
         },
         {
-          "path": "registry/new-york/payment-hooks/app/api/powertranz/tokenize/route.ts",
-          "type": "registry:file",
+          "path": "registry/payment-hooks/lib/powertranz/builders/sale.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/payment-hooks/lib/powertranz/builders/refund.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/payment-hooks/lib/powertranz/builders/hpp.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/payment-hooks/lib/powertranz/builders/recurring.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/payment-hooks/lib/powertranz/builders/void.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/payment-hooks/components/hooks/use-powertranz.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "registry/payment-hooks/components/powertranz-iframe.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/tokenize/route.ts",
+          "type": "registry:page",
           "target": "app/api/powertranz/tokenize/route.ts"
         },
         {
-          "path": "registry/new-york/payment-hooks/app/api/powertranz/zero-dollar-auth/route.ts",
-          "type": "registry:file",
+          "path": "registry/payment-hooks/app/api/powertranz/auth/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/auth/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/auth-response/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/auth-response/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/capture/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/capture/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/sale/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/sale/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/refund/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/refund/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/response/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/response/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/zero-dollar-auth/route.ts",
+          "type": "registry:page",
           "target": "app/api/powertranz/zero-dollar-auth/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/hpp/start/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/hpp/start/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/hpp/response/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/hpp/response/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/recurring/setup/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/recurring/setup/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/recurring/cancel/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/recurring/cancel/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/recurring/webhook/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/recurring/webhook/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/void/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/void/route.ts"
         }
-      ]
+      ],
+      "cssVars": {
+        "theme": {
+          "font-sans": "Inter, sans-serif"
+        }
+      }
     }
   ]
 }

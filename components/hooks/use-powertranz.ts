@@ -1,218 +1,156 @@
-import axios from "axios";
 import { useState } from "react";
+import type {
+  Result,
+  TokenizeCardProps,
+  TokenizeCardResponse,
+  CapturePaymentProps,
+  CapturePaymentResponse,
+  AuthFlowProps,
+  DirectSaleProps,
+  RefundProps,
+  HostedPageProps,
+  RecurringSetupProps,
+  RecurringCancelProps,
+  VoidProps,
+} from "@/lib/powertranz";
 
-export type AuthAndCaptureFlowProps = {
-  orderId: string;
-  amount: number;
-  siteRoot: string;
-  transactionIdentifier: string;
-  token: string;
-  email: string;
-  authOnly?: boolean;
-};
+async function handleApiCall<T>(
+  url: string,
+  data: unknown,
+  setLoading: (loading: boolean) => void
+): Promise<Result<T>> {
+  try {
+    setLoading(true);
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
 
-type CardAuthFlowProps = {
-  orderId: string;
-  amount: number;
-  siteRoot: string;
-  transactionIdentifier: string;
-  cardNumber: string;
-  expiration: string;
-  cvv: string;
-  cardholderName: string;
-};
+    const result = await response.json();
 
-export type TokenizeCardProps = {
-  cardNumber: string;
-  expirationYear: string; // YY
-  expirationMonth: string; // MM
-  cvv: string;
-  cardholderName: string;
-  currencyCode?: string;
-};
+    if (!response.ok) {
+      return {
+        ok: false,
+        error: {
+          message: result.message || "API request failed",
+          isoCode: result.IsoResponseCode,
+          raw: result,
+        },
+      };
+    }
 
-type TokenizeCardResponse = {
-  TransactionType: number;
-  TotalAmount: number;
-  Approved: boolean;
-  TransactionIdentifier: string;
-  IsoResponseCode: string;
-  PanToken?: string;
-  ResponseMessage: string;
-  OrderIdentifier: string;
-  Errors?: [{ Code: string; Message: string }];
-  CardBrand?: string;
-  CurrencyCode?: string;
-};
-
-export type CapturePaymentProps = {
-  transactionIdentifier: string;
-  amount: number;
-};
-
-export type CapturePaymentResponse = {
-  OriginalTrxnIdentifier: string;
-  TransactionType: number;
-  Approved: boolean;
-  TransactionIdentifier: string;
-  TotalAmount: number;
-  CurrencyCode: string;
-  RRN: string;
-  IsoResponseCode: string;
-  ResponseMessage: string;
-  OrderIdentifier: string;
-};
+    return { ok: true, data: result };
+  } catch (error) {
+    return {
+      ok: false,
+      error: {
+        message: error instanceof Error ? error.message : "Unknown error",
+        raw: error,
+      },
+    };
+  } finally {
+    setLoading(false);
+  }
+}
 
 const usePowertranz = () => {
   const [loading, setLoading] = useState(false);
 
-  // Load FAC Auth (and Capture) Flow
-  const loadPowertranzAuthAndCaptureFlow = async ({
-    orderId,
-    amount,
-    siteRoot,
-    transactionIdentifier,
-    token,
-    email,
-    authOnly = false,
-  }: AuthAndCaptureFlowProps) => {
-    // Only attempt to load HPP if in browser, and not when SSR is running
-    if (!siteRoot) {
-      throw new Error("Running in SSR mode");
-    }
-    let config = {
-      method: "post",
-      url: `/api/powertranz/auth`,
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      data: {
-        orderId,
-        amount,
-        siteRoot,
-        transactionIdentifier,
-        token,
-        email,
-        authOnly,
-      },
-    };
-    setLoading(true);
-    const response = await axios(config); // api call to fetch fac hosted page html
-    setLoading(false);
-    console.log("@loadPowertranzAuthAndCaptureFlow response: ");
-    console.log(response.data);
-    if (response.data.ResponseMessage === "Duplicate transaction") {
-      console.error(
-        "This checkout has already been processed. Please go back and try your order again."
-      );
-      throw new Error("Duplicate transaction");
+  const startAuth = async (props: AuthFlowProps): Promise<Result<{ redirectData: string; spiToken: string }>> => {
+    if (!props.siteRoot) {
+      return { ok: false, error: { message: "Running in SSR mode" } };
     }
 
-    return response.data.RedirectData;
+    const result = await handleApiCall<{ RedirectData: string; SpiToken: string }>(
+      "/api/powertranz/auth",
+      props,
+      setLoading
+    );
+
+    if (result.ok && result.data) {
+      return { ok: true, data: { redirectData: result.data.RedirectData, spiToken: result.data.SpiToken } };
+    }
+
+    if (!result.ok && result.error) {
+      return { ok: false, error: result.error };
+    }
+
+    return { ok: false, error: { message: "Unknown error" } };
   };
 
-  // Load FAC Zero Dollar Auth Flow
-  const loadPowertranzCardAuthFlow = async ({
-    orderId,
-    amount,
-    siteRoot,
-    transactionIdentifier,
-    cardNumber,
-    expiration,
-    cvv,
-    cardholderName,
-  }: CardAuthFlowProps) => {
-    console.log({ orderId, amount, siteRoot });
-    // Only attempt to load HPP if in browser, and not when SSR is running
-    if (!siteRoot) {
-      throw new Error("Running in SSR mode");
-    }
-    let config = {
-      method: "post",
-      url: `/api/powertranz/zero-dollar-auth`,
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      data: {
-        orderId,
-        amount,
-        siteRoot,
-        transactionIdentifier,
-        cardNumber,
-        expiration,
-        cvv,
-        cardholderName,
-      },
-    };
-    setLoading(true);
-    const response = await axios(config); // api call to fetch fac hosted page html
-    setLoading(false);
-    console.log(response.data);
-    if (response.data.ResponseMessage === "Duplicate transaction") {
-      console.error(
-        "This checkout has already been processed. Please go back and try your order again."
-      );
-      throw new Error("Duplicate transaction");
-    }
-
-    // console.log(`Axios Response: ${stringify(response.data)}`); // data property of axios response object
-    // console.log(`Axios Status: ${stringify(response.status)}`); // status property of axios response object
-    return response.data.RedirectData;
+  const capture = async (props: CapturePaymentProps): Promise<Result<CapturePaymentResponse>> => {
+    return handleApiCall<CapturePaymentResponse>("/api/powertranz/capture", props, setLoading);
   };
 
-  // Tokenize a Card
-  const tokenizeCard = async ({
-    cardNumber,
-    expirationYear,
-    expirationMonth,
-    cvv,
-    cardholderName,
-    currencyCode,
-  }: TokenizeCardProps): Promise<TokenizeCardResponse> => {
-    try {
-      setLoading(true);
-      const response = await axios.post("/api/powertranz/tokenize", {
-        cardNumber,
-        expirationYear,
-        expirationMonth,
-        cvv,
-        cardholderName,
-        currencyCode,
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Tokenization error:", error);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
+  const tokenizeCard = async (props: TokenizeCardProps): Promise<Result<TokenizeCardResponse>> => {
+    return handleApiCall<TokenizeCardResponse>("/api/powertranz/tokenize", props, setLoading);
   };
 
-  const capturePayment = async ({
-    transactionIdentifier,
-    amount,
-  }: CapturePaymentProps): Promise<CapturePaymentResponse> => {
-    try {
-      setLoading(true);
-      const response = await axios.post("/api/powertranz/capture", {
-        transactionIdentifier,
-        amount,
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Tokenization error:", error);
-      throw error;
-    } finally {
-      setLoading(false);
+  const directSale = async (props: DirectSaleProps): Promise<Result<unknown>> => {
+    return handleApiCall("/api/powertranz/sale", props, setLoading);
+  };
+
+  const refund = async (props: RefundProps): Promise<Result<unknown>> => {
+    return handleApiCall("/api/powertranz/refund", props, setLoading);
+  };
+
+  const startHostedPageSession = async (props: HostedPageProps): Promise<Result<{ redirectData: string; spiToken: string }>> => {
+    const result = await handleApiCall<{ RedirectData: string; SpiToken: string }>(
+      "/api/powertranz/hpp/start",
+      props,
+      setLoading
+    );
+
+    if (result.ok && result.data) {
+      return { ok: true, data: { redirectData: result.data.RedirectData, spiToken: result.data.SpiToken } };
     }
+
+    if (!result.ok && result.error) {
+      return { ok: false, error: result.error };
+    }
+
+    return { ok: false, error: { message: "Unknown error" } };
+  };
+
+  const setupManagedRecurring = async (props: RecurringSetupProps): Promise<Result<unknown>> => {
+    return handleApiCall("/api/powertranz/recurring/setup", props, setLoading);
+  };
+
+  const cancelManagedRecurring = async (props: RecurringCancelProps): Promise<Result<unknown>> => {
+    return handleApiCall("/api/powertranz/recurring/cancel", props, setLoading);
+  };
+
+  const voidAuthorization = async (props: VoidProps): Promise<Result<unknown>> => {
+    return handleApiCall("/api/powertranz/void", props, setLoading);
   };
 
   return {
-    loadPowertranzAuthAndCaptureFlow,
-    loadPowertranzCardAuthFlow,
+    startAuth,
+    capture,
     tokenizeCard,
-    capturePayment,
+    directSale,
+    refund,
+    startHostedPageSession,
+    setupManagedRecurring,
+    cancelManagedRecurring,
+    voidAuthorization,
     loading,
   };
 };
+
 export default usePowertranz;
+
+export type {
+  TokenizeCardProps,
+  TokenizeCardResponse,
+  CapturePaymentProps,
+  CapturePaymentResponse,
+  AuthFlowProps,
+  DirectSaleProps,
+  RefundProps,
+  HostedPageProps,
+  RecurringSetupProps,
+  RecurringCancelProps,
+  VoidProps,
+};

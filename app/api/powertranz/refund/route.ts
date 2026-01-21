@@ -1,41 +1,31 @@
-import axios from "axios";
 import { NextResponse } from "next/server";
+import { createPowertranzClient, sanitizeForLogging } from "@/lib/powertranz";
 
-export const dynamic = "force-dynamic"; // defaults to force-static
-export async function POST(request: Request, response: Response) {
+export const dynamic = "force-dynamic";
+
+export async function POST(request: Request) {
   const data = await request.json();
   const { transactionIdentifier, amount } = data;
-  console.log({
-    amount,
-    transactionIdentifier,
-  });
 
-  // build refund request
-  const refundRequest = {
-    Refund: true,
-    TransactionIdentifier: transactionIdentifier, // transaction id that needed to refund
-    TotalAmount: Number(amount), //Amount to be refunded
-    CurrencyCode: "780", //TTD code
-  };
+  console.log("Refund request (sanitized):", sanitizeForLogging({ transactionIdentifier, amount }));
 
-  const config = {
-    method: "post",
-    url: `${process.env.NEXT_PUBLIC_FAC_PTRANZ_BASE_URL}/refund`,
-    headers: {
-      "PowerTranz-PowerTranzId": process.env.FAC_MERCHANT_ID,
-      "PowerTranz-PowerTranzPassword": process.env.FAC_PROCESSING_PASS,
-      "Content-Type": "application/json; charset=utf-8",
-    },
-    data: refundRequest,
-  };
+  const client = createPowertranzClient();
 
   try {
-    const refundResponse = await axios(config);
-    console.log("refund response: ", refundResponse.data);
-    return NextResponse.json(refundResponse.data);
+    const response = await client.post("/refund", {
+      Refund: true,
+      TransactionIdentifier: transactionIdentifier,
+      TotalAmount: Number(amount),
+      CurrencyCode: "780",
+    });
+
+    console.log("Refund response:", sanitizeForLogging(response.data));
+    return NextResponse.json(response.data);
   } catch (error) {
-    console.log(`PowerTranz ERROR: ${error}`);
-    // Return a new error response
-    return NextResponse.error();
+    console.error("PowerTranz refund error:", error);
+    return NextResponse.json(
+      { error: "Refund failed", message: "Failed to process refund" },
+      { status: 500 }
+    );
   }
 }
