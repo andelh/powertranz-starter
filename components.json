@@ -19,6 +19,6 @@
   },
   "iconLibrary": "lucide",
   "registries": {
-    "@powertranz": "https://powertranz-hooks-git-main-techxture-media.vercel.app/r/{name}.json"
+    "@powertranz": "https://powertranz-hooks.vercel.app/r/{name}.json"
   }
 }
