@@ -57,3 +57,6 @@ next-env.d.ts
 /public/r/*.json
 !/public/r/registry.json
 
+
+# Starting docs
+/docs
