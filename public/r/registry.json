@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "powertranz-starter-template",
+  "homepage": "https://github.com/andelhusbands/powertranz-starter-template",
+  "items": [
+    {
+      "name": "payment-hooks",
+      "type": "registry:block",
+      "title": "PowerTranz payment hooks",
+      "description": "Hooks for PowerTranz payment flows.",
+      "files": [
+        {
+          "path": "registry/new-york/payment-hooks/components/hooks/use-powertranz.ts",
+          "type": "registry:file",
+          "target": "components/hooks/use-powertranz.ts"
+        }
+      ]
+    }
+  ]
+}
