@@ -1,27 +1,25 @@
+import { AuthAndCaptureFlowProps } from "@/components/hooks/use-powertranz";
 import axios from "axios";
 import { NextResponse } from "next/server";
 
-export const dynamic = "force-dynamic"; // defaults to force-static
-
 export async function POST(request: Request) {
-  const data = await request.json();
+  const data = (await request.json()) as AuthAndCaptureFlowProps;
   const {
     siteRoot,
     token,
     amount,
-    cardholderName = "John Baker",
     orderId,
     transactionIdentifier,
-    authOnly = false,
     email,
+    authOnly,
   } = data;
   console.log({
     amount,
     token,
-    cardholderName,
     orderId,
     transactionIdentifier,
     email,
+    authOnly,
   });
 
   // build authorization request
@@ -34,7 +32,6 @@ export async function POST(request: Request) {
     OrderIdentifier: orderId,
     Source: {
       Token: token,
-      CardholderName: cardholderName,
     },
     BillingAddress: {
       EmailAddress: email,
@@ -44,11 +41,9 @@ export async function POST(request: Request) {
         ChallengeWindowSize: 4,
         ChallengeIndicator: "01",
       },
-      // TODO: Handle auth only as well?
       MerchantResponseUrl: `${siteRoot}/api/powertranz/${
-        authOnly ? "auth-only-response" : "response"
+        authOnly ? "auth-response" : "response"
       }`,
-      // MerchantResponseUrl: `${siteRoot}/api/powertranz/${authOnly ? "hpp-auth-only" : "hpp-result"}`,
     },
   };
 

@@ -38,37 +38,6 @@ export async function POST(request: Request) {
     const captureResponse = captureResult.data;
     console.log("capture response:", captureResponse);
 
-    if (captureResponse.IsoResponseCode === "00") {
-      // Successful payment capture!
-      return NextResponse.json(
-        {
-          success: true,
-          message: "Success",
-          captureResponse,
-        },
-        { headers },
-      );
-    } else {
-      // Something went wrong capturing the payment
-
-      // TODO: Send email to the user to let them know they need to pay by x
-      // await sendEmail(
-      //   checkoutId,
-      //   pendingPurchase.patron?.email ?? "",
-      //   pendingPurchase.event?.name ?? "",
-      //   true,
-      // );
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Failed to capture payment",
-          captureResponse,
-          errors: captureResponse.Errors,
-        },
-        { headers },
-      );
-    }
-
     return NextResponse.json(captureResponse);
   } catch (error) {
     console.log(`PowerTranz ERROR: ${error}`);

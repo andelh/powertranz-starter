@@ -42,56 +42,33 @@ export async function POST(request: NextRequest) {
         data: JSON.stringify(authResponse.SpiToken),
       };
 
-      console.log("powetranz payment config", config);
-
       const paymentResult = await axios(config);
       const paymentResponse = paymentResult.data;
       console.log("payment response:", paymentResponse);
 
       if (paymentResponse.IsoResponseCode === "00") {
-        config.url = `${process.env.NEXT_PUBLIC_FAC_PTRANZ_BASE_URL}/capture`;
-        config.data = {
-          transactionIdentifier: paymentResponse.TransactionIdentifier,
-          totalAmount: paymentResponse.TotalAmount,
-        };
-        console.log("powetranz capture config", config);
+        const urlParams = new URLSearchParams({
+          isSuccess: "1",
+          order_id: authResponse.OrderIdentifier,
+          amount: paymentResponse.TotalAmount,
+          txn_type: "capture",
+          responseCode: paymentResponse.IsoResponseCode,
+          responseMessage: paymentResponse.ResponseMessage || "",
+          referenceNumber: paymentResponse.RRN || "",
+          transactionIdentifier: paymentResponse.TransactionIdentifier || "",
+        });
+        const paymentCompleteUrl = `/response?${urlParams.toString()}`;
+        console.log("Redirecting to success URL:", paymentCompleteUrl);
 
-        const captureResult = await axios(config);
-        const captureResponse = captureResult.data;
-        console.log("capture response:", captureResponse);
+        // Get the origin from the request
+        const origin = new URL(request.url).origin;
+        const fullRedirectUrl = `${origin}${paymentCompleteUrl}`;
+        console.log("Full redirect URL:", fullRedirectUrl);
 
-        if (captureResponse.IsoResponseCode === "00") {
-          const urlParams = new URLSearchParams({
-            isSuccess: "1",
-            order_id: authResponse.OrderIdentifier,
-            txn_type: "capture",
-            responseCode: captureResponse.IsoResponseCode,
-            responseMessage: captureResponse.ResponseMessage || "",
-            referenceNumber: captureResponse.RRN || "",
-            transactionIdentifier: paymentResponse.TransactionIdentifier || "",
-          });
-          const paymentCompleteUrl = `/response?${urlParams.toString()}`;
-          console.log("Redirecting to success URL:", paymentCompleteUrl);
-
-          // Get the origin from the request
-          const origin = new URL(request.url).origin;
-          const fullRedirectUrl = `${origin}${paymentCompleteUrl}`;
-          console.log("Full redirect URL:", fullRedirectUrl);
-
-          // TODO: Complete the order, or do whatever success logic you want here
-
-          return NextResponse.redirect(fullRedirectUrl, {
-            status: 302,
-            headers,
-          });
-        } else {
-          error = {
-            txnType: "capture",
-            code: captureResponse.IsoResponseCode,
-            message: captureResponse.ResponseMessage,
-            additionalErrors: captureResponse.Errors || null,
-          };
-        }
+        return NextResponse.redirect(fullRedirectUrl, {
+          status: 302,
+          headers,
+        });
       } else {
         error = {
           txnType: "payment",

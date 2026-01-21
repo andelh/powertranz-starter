@@ -1,15 +1,14 @@
 import axios from "axios";
-// import { stringify } from "flatted";
 import { useState } from "react";
 
-type AuthAndCaptureFlowProps = {
+export type AuthAndCaptureFlowProps = {
   orderId: string;
   amount: number;
   siteRoot: string;
   transactionIdentifier: string;
   token: string;
-  authOnly: boolean;
   email: string;
+  authOnly?: boolean;
 };
 
 type CardAuthFlowProps = {
@@ -23,20 +22,60 @@ type CardAuthFlowProps = {
   cardholderName: string;
 };
 
+export type TokenizeCardProps = {
+  cardNumber: string;
+  expirationYear: string; // YY
+  expirationMonth: string; // MM
+  cvv: string;
+  cardholderName: string;
+  currencyCode?: string;
+};
+
+type TokenizeCardResponse = {
+  TransactionType: number;
+  TotalAmount: number;
+  Approved: boolean;
+  TransactionIdentifier: string;
+  IsoResponseCode: string;
+  PanToken?: string;
+  ResponseMessage: string;
+  OrderIdentifier: string;
+  Errors?: [{ Code: string; Message: string }];
+  CardBrand?: string;
+  CurrencyCode?: string;
+};
+
+export type CapturePaymentProps = {
+  transactionIdentifier: string;
+  amount: number;
+};
+
+export type CapturePaymentResponse = {
+  OriginalTrxnIdentifier: string;
+  TransactionType: number;
+  Approved: boolean;
+  TransactionIdentifier: string;
+  TotalAmount: number;
+  CurrencyCode: string;
+  RRN: string;
+  IsoResponseCode: string;
+  ResponseMessage: string;
+  OrderIdentifier: string;
+};
+
 const usePowertranz = () => {
   const [loading, setLoading] = useState(false);
 
-  // Load FAC Auth Flow
+  // Load FAC Auth (and Capture) Flow
   const loadPowertranzAuthAndCaptureFlow = async ({
     orderId,
     amount,
     siteRoot,
     transactionIdentifier,
     token,
-    authOnly = false,
     email,
+    authOnly = false,
   }: AuthAndCaptureFlowProps) => {
-    console.log({ orderId, amount, siteRoot });
     // Only attempt to load HPP if in browser, and not when SSR is running
     if (!siteRoot) {
       throw new Error("Running in SSR mode");
@@ -53,8 +92,8 @@ const usePowertranz = () => {
         siteRoot,
         transactionIdentifier,
         token,
-        authOnly,
         email,
+        authOnly,
       },
     };
     setLoading(true);
@@ -69,8 +108,6 @@ const usePowertranz = () => {
       throw new Error("Duplicate transaction");
     }
 
-    // console.log(`Axios Response: ${stringify(response.data)}`); // data property of axios response object
-    // console.log(`Axios Status: ${stringify(response.status)}`); // status property of axios response object
     return response.data.RedirectData;
   };
 
@@ -123,9 +160,58 @@ const usePowertranz = () => {
     return response.data.RedirectData;
   };
 
+  // Tokenize a Card
+  const tokenizeCard = async ({
+    cardNumber,
+    expirationYear,
+    expirationMonth,
+    cvv,
+    cardholderName,
+    currencyCode,
+  }: TokenizeCardProps): Promise<TokenizeCardResponse> => {
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/powertranz/tokenize", {
+        cardNumber,
+        expirationYear,
+        expirationMonth,
+        cvv,
+        cardholderName,
+        currencyCode,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Tokenization error:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const capturePayment = async ({
+    transactionIdentifier,
+    amount,
+  }: CapturePaymentProps): Promise<CapturePaymentResponse> => {
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/powertranz/capture", {
+        transactionIdentifier,
+        amount,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Tokenization error:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     loadPowertranzAuthAndCaptureFlow,
     loadPowertranzCardAuthFlow,
+    tokenizeCard,
+    capturePayment,
     loading,
   };
 };

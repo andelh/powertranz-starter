@@ -1,33 +1,39 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
+import { TokenizeCardProps } from "@/components/hooks/use-powertranz";
 
-export const dynamic = "force-dynamic"; // defaults to force-static
-export async function POST(request: Request, response: Response) {
-  const data = await request.json();
+export async function POST(request: Request) {
+  const data = (await request.json()) as TokenizeCardProps;
   const {
     cardNumber,
     cvv,
-    expiration,
+    expirationYear,
+    expirationMonth,
     cardholderName,
-    orderId,
-    transactionIdentifier,
-    email,
+    currencyCode = "780", // TTD code
   } = data;
   console.log({
     cardNumber,
     cvv,
-    expiration,
+    expirationYear,
+    expirationMonth,
     cardholderName,
-    orderId,
-    transactionIdentifier,
-    email,
+    currencyCode,
   });
+
+  // Generate a UUID for the transaction identifier and orderId
+  const transactionIdentifier = crypto.randomUUID();
+  const orderId = crypto.randomUUID();
+
+  // Format the expiration date, the /tokenize endpoint expects YYMM
+  const expiration = `${expirationYear}${expirationMonth}`;
 
   // build tokenize request
   const tokenizeRequest = {
+    AddressMatch: false,
+    CurrencyCode: currencyCode,
     TransactionIdentifier: transactionIdentifier,
     TotalAmount: Number(0),
-    CurrencyCode: "780", //TTD code
     Tokenize: true,
     ThreeDSecure: false,
     OrderIdentifier: orderId,
@@ -36,9 +42,6 @@ export async function POST(request: Request, response: Response) {
       CardCvv: cvv,
       CardExpiration: expiration,
       CardholderName: cardholderName,
-    },
-    BillingAddress: {
-      EmailAddress: email,
     },
   };
 
