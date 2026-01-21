@@ -115,14 +115,3 @@ export interface RecurringCancelProps {
 export interface VoidProps {
   transactionIdentifier: string;
 }
-
-export interface ZeroDollarAuthProps {
-  orderId: string;
-  amount: number;
-  siteRoot: string;
-  transactionIdentifier: string;
-  cardNumber: string;
-  cardCvv?: string;
-  cardExpiration?: string;
-  cardholderName?: string;
-}

@@ -12,7 +12,6 @@ import type {
   RecurringSetupProps,
   RecurringCancelProps,
   VoidProps,
-  ZeroDollarAuthProps,
 } from "@/lib/powertranz";
 
 async function handleApiCall<T>(
@@ -126,10 +125,6 @@ const usePowertranz = () => {
     return handleApiCall("/api/powertranz/void", props, setLoading);
   };
 
-  const zeroDollarAuth = async (props: ZeroDollarAuthProps): Promise<Result<unknown>> => {
-    return handleApiCall("/api/powertranz/zero-dollar-auth", props, setLoading);
-  };
-
   return {
     startAuth,
     capture,
@@ -140,7 +135,6 @@ const usePowertranz = () => {
     setupManagedRecurring,
     cancelManagedRecurring,
     voidAuthorization,
-    zeroDollarAuth,
     loading,
   };
 };
@@ -159,5 +153,4 @@ export type {
   RecurringSetupProps,
   RecurringCancelProps,
   VoidProps,
-  ZeroDollarAuthProps,
 };

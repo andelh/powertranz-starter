@@ -15,7 +15,13 @@
         "react-hooks",
         "api-routes"
       ],
-      "docs": "This registry item provides a complete payment integration with PowerTranz. Requires POWERTRANZ_BASE_URL, POWERTRANZ_MERCHANT_ID, and POWERTRANZ_PROCESSING_PASSWORD environment variables.",
+      "docs": "This registry item provides a complete payment integration with PowerTranz.",
+      "envVars": {
+        "POWERTRANZ_BASE_URL": "PowerTranz API base URL (e.g., https://ptranz.com/api)",
+        "POWERTRANZ_MERCHANT_ID": "Your PowerTranz merchant ID",
+        "POWERTRANZ_PROCESSING_PASSWORD": "Your PowerTranz processing password",
+        "POWERTRANZ_DEFAULT_CURRENCY": "Optional: Default currency code (default: 780 for TTD)"
+      },
       "dependencies": [
         "axios"
       ],
@@ -112,11 +118,6 @@
           "path": "registry/payment-hooks/app/api/powertranz/response/route.ts",
           "type": "registry:page",
           "target": "app/api/powertranz/response/route.ts"
-        },
-        {
-          "path": "registry/payment-hooks/app/api/powertranz/zero-dollar-auth/route.ts",
-          "type": "registry:page",
-          "target": "app/api/powertranz/zero-dollar-auth/route.ts"
         },
         {
           "path": "registry/payment-hooks/app/api/powertranz/hpp/start/route.ts",

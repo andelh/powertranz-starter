@@ -19,6 +19,6 @@
   },
   "iconLibrary": "lucide",
   "registries": {
-    "@powertranz": "https://powertranz-starter-template.vercel.app/r/{name}.json"
+    "@powertranz": "https://powertranz-hooks-git-ralphy-run-techxture-media.vercel.app/r/{name}.json"
   }
 }
