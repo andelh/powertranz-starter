@@ -68,8 +68,8 @@ export default function Home() {
             </div>
 
             {/* Right Side - Terminal Demo */}
-            <div className="flex justify-center lg:justify-end">
-              <Terminal className="shadow-2xl">
+            <div className="flex justify-center lg:justify-end w-full px-2 sm:px-0">
+              <Terminal className="shadow-2xl w-full">
                 <TypingAnimation>
                   npx shadcn@latest add @powertranz/payment-hooks
                 </TypingAnimation>
