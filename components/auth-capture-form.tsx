@@ -12,9 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import usePowertranz, {
-  CapturePaymentResponse,
-} from "@/components/hooks/use-powertranz";
+import usePowertranz, { AuthFlowProps } from "@/components/hooks/use-powertranz";
 import { generateUUID } from "@/lib/utils";
 import ThreeDSLoadingPrompt from "./3ds-loading-prompt";
 
@@ -24,6 +22,13 @@ type AuthResponse = {
   ResponseMessage: string;
   TotalAmount: number;
   OrderIdentifier: string;
+};
+
+type CaptureResponse = {
+  Approved: boolean;
+  TransactionIdentifier: string;
+  ResponseMessage: string;
+  RRN?: string;
 };
 
 export type ThreeDSCompleteData = {
@@ -39,12 +44,10 @@ export type ThreeDSCompleteData = {
 };
 
 export function AuthCaptureForm() {
-  const { loadPowertranzAuthAndCaptureFlow, loading, capturePayment } =
-    usePowertranz();
+  const { startAuth, capture, loading } = usePowertranz();
   const [captureLoading, setCaptureLoading] = useState(false);
   const [authResponse, setAuthResponse] = useState<AuthResponse | null>(null);
-  const [captureResponse, setCaptureResponse] =
-    useState<CapturePaymentResponse | null>(null);
+  const [captureResponse, setCaptureResponse] = useState<CaptureResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [captureError, setCaptureError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -68,29 +71,25 @@ export function AuthCaptureForm() {
     setAuthResponse(null);
     setCaptureResponse(null);
 
-    // UUID
     const transactionIdentifier = generateUUID();
     const orderId = generateUUID();
 
-    try {
-      const response = await loadPowertranzAuthAndCaptureFlow({
-        token: formData.token,
-        amount: Number(formData.amount),
-        email: formData.email,
-        orderId,
-        transactionIdentifier,
-        siteRoot: window.location.origin,
-        authOnly: true,
-      });
+    const authProps: AuthFlowProps = {
+      token: formData.token,
+      amount: Number(formData.amount),
+      email: formData.email,
+      orderId,
+      transactionIdentifier,
+      siteRoot: typeof window !== "undefined" ? window.location.origin : "",
+      authOnly: true,
+    };
 
-      if (response) {
-        setIframeHtml(response);
-      } else {
-        setError("Authorization failed");
-      }
-    } catch (error) {
-      setError("An error occurred during authorization");
-      console.error("Auth error:", error);
+    const response = await startAuth(authProps);
+
+    if (response.ok && response.data) {
+      setIframeHtml(response.data.redirectData);
+    } else if (!response.ok) {
+      setError(response.error?.message || "Authorization failed");
     }
   };
 
@@ -104,23 +103,17 @@ export function AuthCaptureForm() {
     setCaptureError(null);
     setCaptureResponse(null);
 
-    try {
-      const response = await capturePayment({
-        transactionIdentifier: authResponse.TransactionIdentifier,
-        amount: Number(formData.amount),
-      });
+    const response = await capture({
+      transactionIdentifier: authResponse.TransactionIdentifier,
+      amount: Number(formData.amount),
+    });
 
-      setCaptureResponse(response);
-
-      if (!response.Approved) {
-        setCaptureError(response.ResponseMessage || "Capture failed");
-      }
-    } catch (error) {
-      setCaptureError("An error occurred during capture");
-      console.error("Capture error:", error);
-    } finally {
-      setCaptureLoading(false);
+    if (response.ok && response.data) {
+      setCaptureResponse(response.data);
+    } else if (!response.ok) {
+      setCaptureError(response.error?.message || "Capture failed");
     }
+    setCaptureLoading(false);
   };
 
   const resetForm = () => {
@@ -161,7 +154,6 @@ export function AuthCaptureForm() {
             }}
           />
         )}
-        {/* Step 1: Authorization */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center text-sm font-medium">
@@ -255,7 +247,6 @@ export function AuthCaptureForm() {
           <>
             <Separator />
 
-            {/* Step 2: Capture */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center text-sm font-medium">

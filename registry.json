@@ -1,0 +1,109 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "powertranz-starter-template",
+  "homepage": "https://github.com/andelh/powertranz-starter",
+  "items": [
+    {
+      "name": "payment-hooks",
+      "type": "registry:block",
+      "title": "PowerTranz payment hooks",
+      "description": "React hooks and API route handlers for PowerTranz payment flows including tokenization, authorization, capture, refund, void, and hosted payment pages.",
+      "author": "PowerTranz <support@powertranz.com>",
+      "categories": ["payments", "integrations", "react-hooks", "api-routes"],
+      "docs": "This registry item provides a complete payment integration with PowerTranz.",
+      "envVars": {
+        "POWERTRANZ_BASE_URL": "PowerTranz API base URL (e.g., https://ptranz.com/api)",
+        "POWERTRANZ_MERCHANT_ID": "Your PowerTranz merchant ID",
+        "POWERTRANZ_PROCESSING_PASSWORD": "Your PowerTranz processing password",
+        "POWERTRANZ_DEFAULT_CURRENCY": "Optional: Default currency code (default: 780 for TTD)"
+      },
+      "dependencies": ["axios"],
+      "files": [
+        {
+          "path": "registry/payment-hooks/lib/powertranz/types.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/payment-hooks/lib/powertranz/client.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/payment-hooks/lib/powertranz/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/payment-hooks/lib/powertranz/index.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/payment-hooks/components/hooks/use-powertranz.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "registry/payment-hooks/components/powertranz-iframe.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/tokenize/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/tokenize/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/auth/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/auth/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/auth-response/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/auth-response/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/capture/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/capture/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/sale/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/sale/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/refund/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/refund/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/response/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/response/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/hpp/start/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/hpp/start/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/recurring/setup/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/recurring/setup/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/recurring/cancel/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/recurring/cancel/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/recurring/webhook/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/recurring/webhook/route.ts"
+        },
+        {
+          "path": "registry/payment-hooks/app/api/powertranz/void/route.ts",
+          "type": "registry:page",
+          "target": "app/api/powertranz/void/route.ts"
+        }
+      ]
+    }
+  ]
+}

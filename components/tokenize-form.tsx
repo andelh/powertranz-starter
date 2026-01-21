@@ -66,26 +66,24 @@ export function TokenizeForm() {
     setError(null);
     setToken(null);
 
-    try {
-      const response = await tokenizeCard({
-        cardNumber: formData.cardNumber.replace(/\s/g, ""),
-        expirationYear: formData.expiration.split("/")[1] || "",
-        expirationMonth: formData.expiration.split("/")[0] || "",
-        cvv: formData.cvv,
-        cardholderName: formData.cardholderName,
-        currencyCode: "780", // TTD code
-      });
+    const response = await tokenizeCard({
+      cardNumber: formData.cardNumber.replace(/\s/g, ""),
+      expirationYear: formData.expiration.split("/")[1] || "",
+      expirationMonth: formData.expiration.split("/")[0] || "",
+      cvv: formData.cvv,
+      cardholderName: formData.cardholderName,
+      currencyCode: "780",
+    });
 
-      console.log("Tokenize response:", response);
-
-      if (response.PanToken) {
-        setToken(response.PanToken);
+    if (response.ok && response.data) {
+      console.log("Tokenize response:", response.data);
+      if (response.data.PanToken) {
+        setToken(response.data.PanToken);
       } else {
-        setError(response.ResponseMessage || "Tokenization failed");
+        setError(response.data.ResponseMessage || "Tokenization failed");
       }
-    } catch (error) {
-      setError("An error occurred during tokenization");
-      console.error("Tokenization error:", error);
+    } else if (!response.ok) {
+      setError(response.error?.message || "Tokenization failed");
     }
   };
 

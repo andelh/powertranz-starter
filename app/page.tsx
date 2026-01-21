@@ -1,10 +1,11 @@
 import { CreditCardForm } from "@/components/credit-card-form";
 import { Button } from "@/components/ui/button";
+import { Terminal, TypingAnimation, AnimatedSpan } from "@/components/ui/terminal";
 import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background ">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <div className="relative">
         {/* Background decoration */}
@@ -14,12 +15,12 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-4 py-24">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="relative max-w-6xl mx-auto px-4 py-16 sm:py-24">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Left Side - Content */}
-            <div className="space-y-8">
-              <div className="space-y-6">
-                <h1 className="text-5xl font-bold tracking-tight">
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
                   A starter kit for integrating{" "}
                   <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     PowerTranz
@@ -27,25 +28,27 @@ export default function Home() {
                   payments into your full-stack application.
                 </h1>
 
-                <p className="font-mono text-lg leading-normal text-muted-foreground max-w-lg">
+                <p className="font-mono text-sm sm:text-lg leading-normal text-muted-foreground max-w-lg">
                   shadcn/ui style reusable code and hooks for PowerTranz
                   payments.
                 </p>
               </div>
 
-              <div className="flex items-center space-x-4">
-                <Button size="lg" className="text-base px-8">
+              <div className="flex flex-wrap items-center gap-3">
+                <Button size="lg" className="text-base px-6 sm:px-8">
                   Get Started
                 </Button>
-                <Button variant="outline" size="lg" className="text-base px-8">
-                  <span>+</span>
-                  <span className="ml-2">View Documentation</span>
+                <Button variant="outline" size="lg" className="text-base px-6 sm:px-8" asChild>
+                  <Link href="/docs">
+                    <span>+</span>
+                    <span className="ml-2">View Documentation</span>
+                  </Link>
                 </Button>
               </div>
 
               {/* Features */}
-              <div className="pt-8 border-t border-border">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+              <div className="pt-6 border-t border-border">
+                <div className="grid grid-cols-2 gap-3 text-sm">
                   <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full" />
                     <span>Secure tokenization</span>
@@ -66,65 +69,74 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Side - Credit Card Form */}
-            <div className="flex justify-center lg:justify-end">
-              <div className="w-full max-w-md">
-                <CreditCardForm />
-              </div>
+            {/* Right Side - Terminal Demo */}
+            <div className="flex justify-center lg:justify-end w-full px-2 sm:px-0">
+              <Terminal className="shadow-2xl w-full">
+                <TypingAnimation>
+                  npx shadcn@latest add @powertranz/payment-hooks
+                </TypingAnimation>
+                <AnimatedSpan className="text-green-400">
+                  √ Checking registry.
+                </AnimatedSpan>
+                <AnimatedSpan className="text-green-400">
+                  √ Installing dependencies.
+                </AnimatedSpan>
+                <AnimatedSpan className="text-blue-400">
+                  ℹ Created 17 files:
+                </AnimatedSpan>
+                <div className="pl-4 grid gap-y-1 text-muted-foreground">
+                  <AnimatedSpan className="text-muted-foreground">
+                    - lib/powertranz/types.ts
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - lib/powertranz/client.ts
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - lib/powertranz/index.ts
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - lib/powertranz/utils.ts
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - hooks/use-powertranz.ts
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - components/powertranz-iframe.tsx
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - app/api/powertranz/tokenize/route.ts
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - app/api/powertranz/auth/route.ts
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-muted-foreground">
+                    - ...and 9 more API routes
+                  </AnimatedSpan>
+                </div>
+                <AnimatedSpan className="text-green-400 mt-2">
+                  √ Installation complete!
+                </AnimatedSpan>
+              </Terminal>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Additional Features Section */}
-      {/* <div className="border-t border-border bg-muted/50">
-        <div className="max-w-6xl mx-auto px-4 py-24">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">
-              Everything you need for payment processing
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              From tokenization to capture, refunds to reconciliation -
-              PowerTranz provides all the tools you need.
+      {/* Try It Out Section */}
+      <div className="border-t border-border bg-muted/30">
+        <div className="max-w-6xl mx-auto px-4 py-16 sm:py-24">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Try It Out</h2>
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+              Test the PowerTranz integration right here. Tokenize a card, authorize a payment, or process a sale.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center space-y-4">
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center mx-auto">
-                <span className="text-2xl">🔐</span>
-              </div>
-              <h3 className="text-xl font-semibold">Secure Tokenization</h3>
-              <p className="text-muted-foreground">
-                Convert sensitive card data into secure tokens for safe storage
-                and processing.
-              </p>
-            </div>
-
-            <div className="text-center space-y-4">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center mx-auto">
-                <span className="text-2xl">⚡</span>
-              </div>
-              <h3 className="text-xl font-semibold">Instant Processing</h3>
-              <p className="text-muted-foreground">
-                Process payments in real-time with our high-performance
-                infrastructure.
-              </p>
-            </div>
-
-            <div className="text-center space-y-4">
-              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center mx-auto">
-                <span className="text-2xl">🛡️</span>
-              </div>
-              <h3 className="text-xl font-semibold">3D Secure</h3>
-              <p className="text-muted-foreground">
-                Enhanced security with 3D Secure authentication for card
-                transactions.
-              </p>
-            </div>
+          <div className="flex justify-center">
+            <CreditCardForm />
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }

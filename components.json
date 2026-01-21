@@ -17,5 +17,8 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "iconLibrary": "lucide"
+  "iconLibrary": "lucide",
+  "registries": {
+    "@powertranz": "https://powertranz-hooks-git-main-techxture-media.vercel.app/r/{name}.json"
+  }
 }
