@@ -15,12 +15,12 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-4 py-24">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="relative max-w-6xl mx-auto px-4 py-16 sm:py-24">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Left Side - Content */}
-            <div className="space-y-8">
-              <div className="space-y-6">
-                <h1 className="text-5xl font-bold tracking-tight">
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
                   A starter kit for integrating{" "}
                   <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     PowerTranz
@@ -28,25 +28,27 @@ export default function Home() {
                   payments into your full-stack application.
                 </h1>
 
-                <p className="font-mono text-lg leading-normal text-muted-foreground max-w-lg">
+                <p className="font-mono text-sm sm:text-lg leading-normal text-muted-foreground max-w-lg">
                   shadcn/ui style reusable code and hooks for PowerTranz
                   payments.
                 </p>
               </div>
 
-              <div className="flex items-center space-x-4">
-                <Button size="lg" className="text-base px-8">
+              <div className="flex flex-wrap items-center gap-3">
+                <Button size="lg" className="text-base px-6 sm:px-8">
                   Get Started
                 </Button>
-                <Button variant="outline" size="lg" className="text-base px-8">
-                  <span>+</span>
-                  <span className="ml-2">View Documentation</span>
+                <Button variant="outline" size="lg" className="text-base px-6 sm:px-8" asChild>
+                  <Link href="/docs">
+                    <span>+</span>
+                    <span className="ml-2">View Documentation</span>
+                  </Link>
                 </Button>
               </div>
 
               {/* Features */}
-              <div className="pt-8 border-t border-border">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+              <div className="pt-6 border-t border-border">
+                <div className="grid grid-cols-2 gap-3 text-sm">
                   <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full" />
                     <span>Secure tokenization</span>
@@ -122,10 +124,10 @@ export default function Home() {
 
       {/* Try It Out Section */}
       <div className="border-t border-border bg-muted/30">
-        <div className="max-w-6xl mx-auto px-4 py-24">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Try It Out</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+        <div className="max-w-6xl mx-auto px-4 py-16 sm:py-24">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Try It Out</h2>
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
               Test the PowerTranz integration right here. Tokenize a card, authorize a payment, or process a sale.
             </p>
           </div>
