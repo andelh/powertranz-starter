@@ -25,12 +25,6 @@
       "dependencies": [
         "axios"
       ],
-      "registryDependencies": [
-        "button",
-        "input",
-        "label",
-        "card"
-      ],
       "files": [
         {
           "path": "registry/payment-hooks/lib/powertranz/types.ts",

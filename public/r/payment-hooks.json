@@ -12,12 +12,7 @@
     "api-routes"
   ],
   "docs": "This registry item provides a complete payment integration with PowerTranz.",
-  "registryDependencies": [
-    "button",
-    "input",
-    "label",
-    "card"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "axios"
   ],

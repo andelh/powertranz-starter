@@ -18,7 +18,6 @@
         "POWERTRANZ_DEFAULT_CURRENCY": "Optional: Default currency code (default: 780 for TTD)"
       },
       "dependencies": ["axios"],
-      "registryDependencies": ["button", "input", "label", "card"],
       "files": [
         {
           "path": "registry/payment-hooks/lib/powertranz/types.ts",
