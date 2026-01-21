@@ -7,12 +7,48 @@
       "name": "payment-hooks",
       "type": "registry:block",
       "title": "PowerTranz payment hooks",
-      "description": "Hooks for PowerTranz payment flows.",
+      "description": "Hooks and route handlers for PowerTranz payment flows.",
+      "dependencies": ["axios"],
       "files": [
         {
           "path": "registry/new-york/payment-hooks/components/hooks/use-powertranz.ts",
           "type": "registry:file",
           "target": "components/hooks/use-powertranz.ts"
+        },
+        {
+          "path": "registry/new-york/payment-hooks/app/api/powertranz/auth/route.ts",
+          "type": "registry:file",
+          "target": "app/api/powertranz/auth/route.ts"
+        },
+        {
+          "path": "registry/new-york/payment-hooks/app/api/powertranz/auth-response/route.ts",
+          "type": "registry:file",
+          "target": "app/api/powertranz/auth-response/route.ts"
+        },
+        {
+          "path": "registry/new-york/payment-hooks/app/api/powertranz/capture/route.ts",
+          "type": "registry:file",
+          "target": "app/api/powertranz/capture/route.ts"
+        },
+        {
+          "path": "registry/new-york/payment-hooks/app/api/powertranz/refund/route.ts",
+          "type": "registry:file",
+          "target": "app/api/powertranz/refund/route.ts"
+        },
+        {
+          "path": "registry/new-york/payment-hooks/app/api/powertranz/response/route.ts",
+          "type": "registry:file",
+          "target": "app/api/powertranz/response/route.ts"
+        },
+        {
+          "path": "registry/new-york/payment-hooks/app/api/powertranz/tokenize/route.ts",
+          "type": "registry:file",
+          "target": "app/api/powertranz/tokenize/route.ts"
+        },
+        {
+          "path": "registry/new-york/payment-hooks/app/api/powertranz/zero-dollar-auth/route.ts",
+          "type": "registry:file",
+          "target": "app/api/powertranz/zero-dollar-auth/route.ts"
         }
       ]
     }
