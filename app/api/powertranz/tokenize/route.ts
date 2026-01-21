@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { TokenizeCardProps, createPowertranzClient, sanitizeForLogging } from "@/lib/powertranz";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: Request) {
   const data = (await request.json()) as TokenizeCardProps;
   const {

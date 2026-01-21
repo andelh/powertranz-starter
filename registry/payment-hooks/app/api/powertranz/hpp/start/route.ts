@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { HostedPageProps, createPowertranzClient, sanitizeForLogging } from "@/lib/powertranz";
+import { HostedPageProps, createPowertranzClient, powertranzConfig, sanitizeForLogging } from "@/lib/powertranz";
 
 export async function POST(request: Request) {
   const data = (await request.json()) as HostedPageProps;
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     const response = await client.post("/spi/auth", {
       TransactionIdentifier: data.transactionIdentifier,
       TotalAmount: Number(data.amount),
-      CurrencyCode: "780",
+      CurrencyCode: powertranzConfig.defaultCurrency,
       ThreeDSecure: data.threeDSecure ?? false,
       OrderIdentifier: data.orderId,
       AddressMatch: false,

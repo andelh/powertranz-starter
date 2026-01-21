@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { AuthFlowProps, createPowertranzClient, sanitizeForLogging } from "@/lib/powertranz";
+import { AuthFlowProps, createPowertranzClient, powertranzConfig, sanitizeForLogging } from "@/lib/powertranz";
 
 export async function POST(request: Request) {
   const data = (await request.json()) as AuthFlowProps;
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const response = await client.post("/spi/auth", {
       TransactionIdentifier: transactionIdentifier,
       TotalAmount: Number(amount),
-      CurrencyCode: "780",
+      CurrencyCode: powertranzConfig.defaultCurrency,
       ThreeDSecure: true,
       FraudCheck: true,
       OrderIdentifier: orderId,

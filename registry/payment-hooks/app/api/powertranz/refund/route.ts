@@ -1,25 +1,23 @@
 import { NextResponse } from "next/server";
-import { RefundProps, createPowertranzClient, sanitizeForLogging } from "@/lib/powertranz";
+import { createPowertranzClient, powertranzConfig, sanitizeForLogging } from "@/lib/powertranz";
 
 export async function POST(request: Request) {
-  const data = (await request.json()) as RefundProps;
+  const data = await request.json();
+  const { transactionIdentifier, amount } = data;
 
-  console.log("Refund request (sanitized):", sanitizeForLogging({
-    transactionIdentifier: data.transactionIdentifier,
-    amount: data.amount,
-  }));
+  console.log("Refund request (sanitized):", sanitizeForLogging({ transactionIdentifier, amount }));
 
   const client = createPowertranzClient();
 
   try {
     const response = await client.post("/refund", {
       Refund: true,
-      TransactionIdentifier: data.transactionIdentifier,
-      TotalAmount: Number(data.amount),
-      CurrencyCode: data.currencyCode || "780",
+      TransactionIdentifier: transactionIdentifier,
+      TotalAmount: Number(amount),
+      CurrencyCode: powertranzConfig.defaultCurrency,
     });
 
-    console.log("Refund response (sanitized):", sanitizeForLogging(response.data));
+    console.log("Refund response:", sanitizeForLogging(response.data));
     return NextResponse.json(response.data);
   } catch (error) {
     console.error("PowerTranz refund error:", error);

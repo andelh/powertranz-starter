@@ -2,9 +2,15 @@
 
 import { useEffect, useState } from "react";
 
+export interface PowertranzMessagePayload {
+  type: "powertranz-complete" | "powertranz-error";
+  payload?: unknown;
+  message?: string;
+}
+
 export interface PowertranzIframeProps {
   redirectData: string;
-  onComplete?: (data: unknown) => void;
+  onComplete?: (data: PowertranzMessagePayload["payload"]) => void;
   onError?: (error: Error) => void;
   className?: string;
   height?: string;

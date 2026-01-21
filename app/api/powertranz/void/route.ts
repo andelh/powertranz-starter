@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { VoidProps, createPowertranzClient, sanitizeForLogging } from "@/lib/powertranz";
+import { VoidProps, createPowertranzClient, powertranzConfig, sanitizeForLogging } from "@/lib/powertranz";
 
 export async function POST(request: Request) {
   const data = (await request.json()) as VoidProps;
@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     const response = await client.post("/void", {
       Void: true,
       TransactionIdentifier: data.transactionIdentifier,
-      CurrencyCode: "780",
+      CurrencyCode: powertranzConfig.defaultCurrency,
     });
 
     console.log("Void response (sanitized):", sanitizeForLogging(response.data));

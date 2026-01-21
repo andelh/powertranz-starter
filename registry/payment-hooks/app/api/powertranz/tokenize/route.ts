@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { TokenizeCardProps, createPowertranzClient, sanitizeForLogging } from "@/lib/powertranz";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: Request) {
   const data = (await request.json()) as TokenizeCardProps;
   const {
@@ -12,14 +14,7 @@ export async function POST(request: Request) {
     currencyCode,
   } = data;
 
-  console.log("Tokenize request (sanitized):", sanitizeForLogging({
-    cardNumber,
-    cvv,
-    expirationYear,
-    expirationMonth,
-    cardholderName,
-    currencyCode,
-  }));
+  console.log("Tokenize request (sanitized):", sanitizeForLogging({ cardNumber, cvv, expirationYear, expirationMonth, cardholderName, currencyCode }));
 
   const transactionIdentifier = crypto.randomUUID();
   const orderId = crypto.randomUUID();

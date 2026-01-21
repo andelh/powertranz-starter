@@ -36,6 +36,7 @@ const buildItemPayload = async (item) => {
     author: item.author || "PowerTranz",
     categories: item.categories || ["payments", "integrations"],
     docs: item.docs,
+    envVars: item.envVars || {},
     registryDependencies: item.registryDependencies || [],
     dependencies: item.dependencies || [],
     files,

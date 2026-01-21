@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { createPowertranzClient, sanitizeForLogging } from "@/lib/powertranz";
-
-export const dynamic = "force-dynamic";
+import { createPowertranzClient, powertranzConfig, sanitizeForLogging } from "@/lib/powertranz";
 
 export async function POST(request: Request) {
   const data = await request.json();
@@ -16,7 +14,7 @@ export async function POST(request: Request) {
       Refund: true,
       TransactionIdentifier: transactionIdentifier,
       TotalAmount: Number(amount),
-      CurrencyCode: "780",
+      CurrencyCode: powertranzConfig.defaultCurrency,
     });
 
     console.log("Refund response:", sanitizeForLogging(response.data));

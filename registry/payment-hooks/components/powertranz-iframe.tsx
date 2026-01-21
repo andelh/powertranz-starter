@@ -2,9 +2,15 @@
 
 import { useEffect, useState } from "react";
 
+export interface PowertranzMessagePayload {
+  type: "powertranz-complete" | "powertranz-error";
+  payload?: unknown;
+  message?: string;
+}
+
 export interface PowertranzIframeProps {
   redirectData: string;
-  onComplete?: (data: unknown) => void;
+  onComplete?: (data: PowertranzMessagePayload["payload"]) => void;
   onError?: (error: Error) => void;
   className?: string;
   height?: string;
@@ -23,12 +29,16 @@ export function PowertranzIframe({
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin) {
-        return;
-      }
-
       try {
         const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+
+        if (
+          typeof data !== "object" ||
+          data === null ||
+          typeof data.type !== "string"
+        ) {
+          return;
+        }
 
         if (data.type === "powertranz-complete") {
           onComplete?.(data.payload);

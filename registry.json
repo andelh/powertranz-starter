@@ -36,38 +36,6 @@
           "type": "registry:lib"
         },
         {
-          "path": "registry/payment-hooks/lib/powertranz/builders/tokenize.ts",
-          "type": "registry:lib"
-        },
-        {
-          "path": "registry/payment-hooks/lib/powertranz/builders/auth.ts",
-          "type": "registry:lib"
-        },
-        {
-          "path": "registry/payment-hooks/lib/powertranz/builders/capture.ts",
-          "type": "registry:lib"
-        },
-        {
-          "path": "registry/payment-hooks/lib/powertranz/builders/sale.ts",
-          "type": "registry:lib"
-        },
-        {
-          "path": "registry/payment-hooks/lib/powertranz/builders/refund.ts",
-          "type": "registry:lib"
-        },
-        {
-          "path": "registry/payment-hooks/lib/powertranz/builders/hpp.ts",
-          "type": "registry:lib"
-        },
-        {
-          "path": "registry/payment-hooks/lib/powertranz/builders/recurring.ts",
-          "type": "registry:lib"
-        },
-        {
-          "path": "registry/payment-hooks/lib/powertranz/builders/void.ts",
-          "type": "registry:lib"
-        },
-        {
           "path": "registry/payment-hooks/components/hooks/use-powertranz.ts",
           "type": "registry:hook"
         },
@@ -116,11 +84,6 @@
           "target": "app/api/powertranz/hpp/start/route.ts"
         },
         {
-          "path": "registry/payment-hooks/app/api/powertranz/hpp/response/route.ts",
-          "type": "registry:page",
-          "target": "app/api/powertranz/hpp/response/route.ts"
-        },
-        {
           "path": "registry/payment-hooks/app/api/powertranz/recurring/setup/route.ts",
           "type": "registry:page",
           "target": "app/api/powertranz/recurring/setup/route.ts"
@@ -140,12 +103,7 @@
           "type": "registry:page",
           "target": "app/api/powertranz/void/route.ts"
         }
-      ],
-      "cssVars": {
-        "theme": {
-          "font-sans": "Inter, sans-serif"
-        }
-      }
+      ]
     }
   ]
 }
