@@ -1,6 +1,10 @@
 import { CreditCardForm } from "@/components/credit-card-form";
 import { Button } from "@/components/ui/button";
-import { Terminal, TypingAnimation, AnimatedSpan } from "@/components/ui/terminal";
+import {
+  Terminal,
+  TypingAnimation,
+  AnimatedSpan,
+} from "@/components/ui/terminal";
 import Link from "next/link";
 
 export default function Home() {
@@ -38,7 +42,12 @@ export default function Home() {
                 <Button size="lg" className="text-base px-6 sm:px-8">
                   Get Started
                 </Button>
-                <Button variant="outline" size="lg" className="text-base px-6 sm:px-8" asChild>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="text-base px-6 sm:px-8"
+                  asChild
+                >
                   <Link href="/docs">
                     <span>+</span>
                     <span className="ml-2">View Documentation</span>
@@ -73,7 +82,8 @@ export default function Home() {
             <div className="flex justify-center lg:justify-end w-full px-2 sm:px-0">
               <Terminal className="shadow-2xl w-full">
                 <TypingAnimation>
-                  npx shadcn@latest add @powertranz/payment-hooks
+                  npx shadcn@latest add
+                  https://powertranz-hooks.vercel.app/r/payment-hooks.json
                 </TypingAnimation>
                 <AnimatedSpan className="text-green-400">
                   √ Checking registry.
@@ -128,7 +138,8 @@ export default function Home() {
           <div className="text-center mb-10">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4">Try It Out</h2>
             <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-              Test the PowerTranz integration right here. Tokenize a card, authorize a payment, or process a sale.
+              Test the PowerTranz integration right here. Tokenize a card,
+              authorize a payment, or process a sale.
             </p>
           </div>
 
